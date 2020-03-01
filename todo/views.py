@@ -3,12 +3,12 @@ from django.views.generic import TemplateView
 
 
 
-def home(request, template_name='home.html'):
+def base(request, template_name='base.html'):
     return render(request, template_name)
 
 
-def todo_list(request):
-    pass
+def home(request, template_name='home.html'):
+    return render(request, template_name)
 
 def todo_view(request):
     pass
