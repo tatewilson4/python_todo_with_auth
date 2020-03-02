@@ -8,13 +8,15 @@ class TodoForm(ModelForm):
     class Meta:
         model = Todo
         fields = ['item']
+        exclude = ['user']
 
 def base(request, template_name='base.html'):
     return render(request, template_name)
 
 
 def home(request, template_name='home.html'):
-    todo = Todo.objects.all()
+    user = request.user
+    todo = Todo.objects.filter(user=user)
     data = {}
     data['object_list'] = todo
     return render(request, template_name, data)
@@ -26,7 +28,9 @@ def todo_view(request, pk, template_name='todo_detail.html'):
 def todo_create(request, template_name="todo_form.html"):
     form = TodoForm(request.POST or None)
     if form.is_valid():
-        form.save()
+        post = form.save(commit=False)
+        post.user = request.user
+        post.save()
         return redirect('home')
     return render(request, template_name, {'form':form})
 
